@@ -62,3 +62,24 @@ ul{margin:0;padding-left:1.2em}li+li{margin-top:6px}
 .settings select,.settings input{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;color:inherit;background:var(--paper)}
 .settings .ghost{margin-top:12px;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:10px;padding:8px 14px;font:inherit;cursor:pointer}
 .status{margin:12px 0 0;font-size:.85rem;color:var(--brand);font-weight:600}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shimmer{from{background-position:100% 0}to{background-position:0 0}}
+@keyframes fadeup{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.card,.empty{animation:fadeup .22s ease both}
+
+#go.is-loading::before{content:"";display:inline-block;width:14px;height:14px;margin-right:9px;border:2px solid rgba(255,255,255,.45);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;vertical-align:-2px}
+.loading{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 20px}
+.spinner{flex:none;width:22px;height:22px;border:3px solid var(--line);border-top-color:var(--brand);border-radius:50%;animation:spin .8s linear infinite}
+.loading-text{margin:0;font-weight:600}
+.loading-sub{display:block;font-weight:400;font-size:.82rem;color:var(--mut)}
+.sk{background:linear-gradient(90deg,#e6ece9 25%,#f4f8f6 37%,#e6ece9 63%);background-size:400% 100%;animation:shimmer 1.4s ease-in-out infinite;border-radius:8px}
+.sk-card{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center}
+.sk-ring{width:150px;height:150px;border-radius:50%}
+.sk-lines{display:grid;gap:12px}
+.sk-line{height:14px}
+.sk-line.w70{width:70%}.sk-line.w95{width:95%}.sk-line.w45{width:45%}
+.sk-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:10px}
+.sk-box{height:60px;border-radius:12px}
+@media (max-width:520px){.sk-card{grid-template-columns:1fr;justify-items:center}}
+@media (prefers-reduced-motion:reduce){.card,.empty,.sk{animation:none}.spinner,#go.is-loading::before{animation-duration:3s}}

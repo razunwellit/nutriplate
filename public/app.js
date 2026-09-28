@@ -32,10 +32,40 @@ async function api(path, options) {
 
 function showMessage(text) {
   const out = $('#out');
+  out.removeAttribute('aria-busy');
   out.textContent = '';
   const c = el('div', 'card');
   c.append(el('p', 'err', text));
   out.append(c);
+}
+
+// Spinner + skeleton shown while the model is working, mirroring the real layout.
+function showLoading() {
+  const out = $('#out');
+  out.setAttribute('aria-busy', 'true');
+  out.textContent = '';
+
+  const status = el('div', 'loading');
+  const spin = el('div', 'spinner');
+  spin.setAttribute('aria-hidden', 'true');
+  const text = el('p', 'loading-text', 'Analyzing your plate…');
+  const s = liveSettings();
+  const p = providerFor(s.provider);
+  text.append(el('span', 'loading-sub', p ? [p.label, s.model || p.model].filter(Boolean).join(' · ') : 'Contacting the model'));
+  status.append(spin, text);
+
+  const summary = el('div', 'card sk-card');
+  summary.append(el('div', 'sk sk-ring'));
+  const lines = el('div', 'sk-lines');
+  for (const w of ['w70', 'w95', 'w45']) lines.append(el('div', 'sk sk-line ' + w));
+  summary.append(lines);
+
+  const totals = el('div', 'card');
+  const grid = el('div', 'sk-grid');
+  for (let i = 0; i < 8; i++) grid.append(el('div', 'sk sk-box'));
+  totals.append(grid);
+
+  out.append(status, summary, totals);
 }
 
 async function loadConditions() {
@@ -163,6 +193,7 @@ const round = (n) => Math.round(Number(n) || 0);
 
 function render(d) {
   const out = $('#out');
+  out.removeAttribute('aria-busy');
   out.textContent = '';
 
   if (!d.foods.length) {
@@ -222,7 +253,8 @@ $('#form').addEventListener('submit', async (e) => {
   const foods = $('#foods').value.trim();
   if (!foods) { showMessage('Enter at least one food to analyze.'); return; }
   const btn = $('#go');
-  btn.disabled = true; btn.textContent = 'Analyzing…';
+  btn.disabled = true; btn.textContent = 'Analyzing…'; btn.classList.add('is-loading');
+  showLoading();
   persist();
   const s = liveSettings();
   const payload = { foods, conditions: [...selected] };
@@ -240,7 +272,7 @@ $('#form').addEventListener('submit', async (e) => {
     if (/API settings/i.test(err.message)) $('#settings').open = true;
     showMessage(err.message);
   } finally {
-    btn.disabled = false; btn.textContent = 'Analyze meal';
+    btn.disabled = false; btn.textContent = 'Analyze meal'; btn.classList.remove('is-loading');
   }
 });
 

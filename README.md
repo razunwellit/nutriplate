@@ -2,7 +2,7 @@
 
 **AI meal nutrient analyzer and condition-aware portion planner.**
 
-Enter a meal in plain language, pick the health conditions that apply (diabetes, high cholesterol, fatty liver, hypertension, weight loss, kidney disease), and get back nutrient totals, a 0–100 plate score, and per-food portion advice with healthier swaps.
+Enter a meal in plain language, pick the health conditions that apply (15 of them — diabetes, heart disease, gout, celiac, GERD, PCOS, pregnancy, and more), and get back nutrient totals, a 0–100 plate score, and per-food portion advice with healthier swaps.
 
 The Node/Express backend asks an LLM provider for a structured analysis. **No API key is required to run it** — each visitor can bring their own key from the page itself.
 
@@ -13,11 +13,26 @@ The Node/Express backend asks an LLM provider for a structured analysis. **No AP
 ## Features
 
 - **Plain-language input** — "2 rotis, 1 cup dal, fried chicken 150 g, white rice, mango juice". Amounts are optional; a typical serving is assumed and stated.
+- **15 health conditions** — pick up to 8 per analysis, from diabetes and heart disease to gout, celiac, PCOS and pregnancy.
 - **Condition-aware advice** — every food is tagged `ok` / `reduce` / `avoid` for the selected conditions, with a concrete suggested portion and a one-line reason.
 - **Server-computed totals** — the model reports per-food numbers; the server sums them, so the totals always add up.
 - **Plate score & macro ring** — a 0–100 fit score plus a calories-from-carbs/protein/fat breakdown.
 - **Bring your own key** — visitors pick a provider, model and key in the page's API settings (stored only in their browser).
 - **Any provider** — Anthropic-native and OpenAI-compatible wires; OpenRouter, OpenAI, Ollama and any custom endpoint.
+
+## Health conditions
+
+Pick up to 8 per analysis.
+
+| | | |
+|---|---|---|
+| Diabetes | High cholesterol | Fatty liver |
+| High blood pressure | Weight loss | Kidney disease |
+| Heart disease | Gout / high uric acid | Celiac / gluten-free |
+| Acid reflux / GERD | PCOS | Iron-deficiency anemia |
+| Osteoporosis | Lactose intolerance | Pregnancy |
+
+Each condition carries a guidance sentence in `config.js` that steers the model. These are general, widely published guidelines — **have a registered dietitian review and tune them before any public launch.** The app gives general guidance, never a diagnosis.
 
 ## Quick start
 

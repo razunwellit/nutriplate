@@ -60,7 +60,7 @@ export const AI = {
 
 export const LIMITS = {
   maxChars: 600,            // max length of the food list
-  maxConditions: 6,
+  maxConditions: 8,
   rateWindowMin: Number(process.env.RATE_LIMIT_WINDOW_MIN) || 60,
   rateMax: Number(process.env.RATE_LIMIT_MAX) || 20,
   cacheTtlMs: 60 * 60 * 1000, // identical requests reuse the answer for 1 hour
@@ -93,6 +93,42 @@ export const CONDITIONS = {
   kidney: {
     label: 'Kidney disease',
     guidance: 'Limit sodium, and watch potassium, phosphorus and excess protein. Requirements vary a lot by stage, so keep advice conservative and state that a renal dietitian must set exact limits.',
+  },
+  heart: {
+    label: 'Heart disease',
+    guidance: 'Limit saturated fat and avoid trans fat; keep sodium low. Favor vegetables, fruit, whole grains, legumes, nuts, fish and unsaturated oils. Flag fried food, processed meat, refined grains and sugary drinks.',
+  },
+  gout: {
+    label: 'Gout / high uric acid',
+    guidance: 'Limit high-purine foods (red meat, organ meat, shellfish, anchovies, sardines) and fructose-sweetened drinks; avoid alcohol, especially beer. Encourage water, low-fat dairy, vegetables and whole grains. Note that urate targets and medication are set by a clinician.',
+  },
+  celiac: {
+    label: 'Celiac / gluten-free',
+    guidance: 'Every item must be strictly gluten-free: no wheat, barley, rye or malt, including hidden gluten in sauces, gravies, stock cubes, soy sauce, battered food and shared fryers. Favor naturally gluten-free staples (rice, corn, potato, legumes, plain meat, fish, eggs). Flag anything uncertain as needing checking.',
+  },
+  gerd: {
+    label: 'Acid reflux / GERD',
+    guidance: 'Favor smaller meals and avoid eating close to bedtime. Commonly flagged triggers: fried and fatty food, very large portions, citrus, tomato, chocolate, mint, caffeine, alcohol, carbonated and spicy food. Note that individual triggers vary.',
+  },
+  pcos: {
+    label: 'PCOS',
+    guidance: 'Favor low-glycemic carbohydrates, fiber and protein; limit refined carbs, added sugar and sugary drinks to keep blood sugar steady and support gradual weight management. Flag white rice, white bread, sweets and juice.',
+  },
+  anemia: {
+    label: 'Iron-deficiency anemia',
+    guidance: 'Favor iron-rich foods: lean red meat, liver, poultry, fish, eggs, legumes, dark leafy greens and fortified cereals. Pair plant iron with vitamin C, and note that tea or coffee with a meal reduces absorption. Diagnosis and supplements must be managed by a clinician.',
+  },
+  osteoporosis: {
+    label: 'Osteoporosis',
+    guidance: 'Favor calcium (low-fat dairy, fortified plant milks, small fish with bones, tofu, leafy greens) and vitamin D, with adequate protein. Limit excess sodium, caffeine and alcohol. Exact calcium and vitamin D targets are set by a clinician.',
+  },
+  lactose: {
+    label: 'Lactose intolerance',
+    guidance: 'Reduce lactose: milk, soft cheeses, ice cream and large dairy portions. Hard cheeses, butter and many yogurts are often tolerated. Suggest lactose-free milk or fortified plant alternatives to keep calcium up, and note lactase enzyme products exist.',
+  },
+  pregnancy: {
+    label: 'Pregnancy',
+    guidance: 'Food safety first: no raw or undercooked meat, fish, eggs or sprouts; no unpasteurized dairy or soft-ripened cheeses; avoid high-mercury fish (shark, swordfish, king mackerel), raw shellfish, pate and alcohol. Keep caffeine to about 200 mg/day. Favor folate, iron, calcium and vitamin D. Flag raw, undercooked or unpasteurized items clearly.',
   },
 };
 
