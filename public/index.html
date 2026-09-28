@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NutriPlate: meal nutrients and portions for your health condition</title>
+  <meta name="description" content="Enter what you eat, choose your health condition, and get nutrient totals with portion advice.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%2314524a'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <form id="form" class="panel" novalidate>
+      <h1>What's on your plate?</h1>
+      <label for="foods" class="sr">Foods in your meal</label>
+      <textarea id="foods" maxlength="600" rows="5" placeholder="2 rotis, 1 cup dal, fried chicken 150 g, white rice, mango juice"></textarea>
+      <p class="hint">Add amounts if you know them. Without amounts, a typical serving is assumed.</p>
+
+      <fieldset>
+        <legend>Health conditions</legend>
+        <div id="chips" class="chips"></div>
+      </fieldset>
+
+      <button id="go" type="submit">Analyze meal</button>
+      <p class="fine">Estimates from AI. General guidance, not medical advice. Follow your doctor or dietitian's plan.</p>
+
+      <details id="settings" class="settings">
+        <summary>API settings</summary>
+        <p class="hint">Saved in this browser only. Your key is sent to this site just to run the analysis and is never stored on the server.</p>
+
+        <label for="provider">Provider</label>
+        <select id="provider"></select>
+
+        <label for="model">Model</label>
+        <input id="model" type="text" autocomplete="off" spellcheck="false" placeholder="model id">
+
+        <label for="apikey">API key</label>
+        <input id="apikey" type="password" autocomplete="off" spellcheck="false" placeholder="paste your key">
+
+        <button id="clearSettings" type="button" class="ghost">Clear saved key</button>
+        <p id="status" class="status"></p>
+      </details>
+    </form>
+
+    <section id="out" class="results" aria-live="polite">
+      <div class="empty">
+        <p>Your nutrient totals, plate score and portion advice will appear here.</p>
+      </div>
+    </section>
+  </div>
+  <script src="/app.js" type="module"></script>
+</body>
+</html>

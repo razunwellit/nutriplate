@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Local secrets — never commit these
+.env
+.env.local
+.env.*.local
+
+# Local tooling / editor / OS cruft
+.commandcode/
+.DS_Store
+Thumbs.db
+*.log
+
+# Duplicate export of this project, not part of the source tree
+nutriplate-site.zip
