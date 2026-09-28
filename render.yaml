@@ -1,0 +1,26 @@
+# Render Blueprint — deploy this repo as a free web service.
+# In Render: New + > Blueprint > pick this repo. Render reads this file.
+# Spec: https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: nutriplate
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/conditions
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Server-side default provider and model. Neither is secret, and visitors
+      # can still override both (and bring their own key) from API settings.
+      - key: AI_PROVIDER
+        value: openrouter
+      - key: AI_MODEL
+        value: inclusionai/ling-3.0-flash-sante:free
+      # Optional. Only needed if you want the server to supply one key for every
+      # visitor; leave it blank for a bring-your-own-key site.
+      # `sync: false` keeps the value out of this file and out of git, and makes
+      # Render prompt for it when you create the Blueprint.
+      - key: OPENROUTER_API_KEY
+        sync: false

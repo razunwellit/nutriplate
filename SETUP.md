@@ -148,9 +148,59 @@ PORT=4000
 
 ## Deploying
 
-1. Set `NODE_ENV=production` on the host.
-2. Run `npm start`.
-3. Serve over **HTTPS** — a key entered in the browser crosses the wire to your server.
-4. Set the provider env vars in the host's dashboard if you want a server-side default; otherwise visitors bring their own key.
+The app is a long-running Node server with no database, no build step and no disk writes, so almost any Node host works. Free options that run a persistent process:
 
-Any Node host works (Render, Railway, Fly.io, a VPS). The app needs no database and no build step.
+| Host | Free tier | Card needed | Trade-off |
+|---|---|---|---|
+| **Render** | 512 MB web service, 750 hrs/month | No | Sleeps after 15 min idle; ~1 min cold start |
+| **Northflank** | 2 services | Yes, to verify | Stays awake — no cold starts |
+| **Koyeb** | 1 service | Yes, to verify | Sleeps when idle; no monthly hour cap |
+| **Zeabur** | $5/month usage credit | No | Runs until the credit is used up |
+| **Railway** | $5 trial, then $1/month credit | No | Trial credit, then very small |
+
+> **Vercel, Netlify and Cloudflare Workers cannot run this app unchanged.** They execute short-lived functions per request rather than a persistent server, so a plain Express app has nowhere to stay up.
+
+### Render, step by step
+
+1. Push this repo to GitHub.
+2. Sign in at <https://render.com> with GitHub — no card required.
+3. Click **New +** → **Blueprint**.
+4. Pick the `nutriplate` repo and click **Connect**. Render reads `render.yaml`.
+5. It shows the environment variables. `OPENROUTER_API_KEY` is optional: leave it blank for a bring-your-own-key site, or paste a key to supply one for every visitor (billed to you).
+6. Click **Apply**. Render installs dependencies, starts the app, and health-checks `/api/conditions`.
+7. When the deploy goes green, open the `https://….onrender.com` URL.
+
+**Cold starts:** a free Render service sleeps after 15 minutes without traffic. The next visit takes up to about a minute, during which Render shows its own loading page; the app's skeleton appears as soon as the server answers. That first wake-up is the main reason people move to a paid instance.
+
+### Any container host (Docker)
+
+A `Dockerfile` is included:
+
+```bash
+docker build -t nutriplate .
+docker run -p 3000:3000 \
+  -e NODE_ENV=production \
+  -e AI_PROVIDER=openrouter \
+  -e AI_MODEL=inclusionai/ling-3.0-flash-sante:free \
+  nutriplate
+```
+
+Point a container host at the Dockerfile (Cloud Run, Fly.io, Northflank, Koyeb, a VPS) and set the same environment variables.
+
+### Environment variables to set on the host
+
+| Variable | Value |
+|---|---|
+| `NODE_ENV` | `production` |
+| `AI_PROVIDER` | `openrouter` (or whichever provider you default to) |
+| `AI_MODEL` | e.g. `inclusionai/ling-3.0-flash-sante:free` |
+| `OPENROUTER_API_KEY` | optional — only if the server supplies a key for everyone |
+
+Never put the key in the repo: set it in the host's dashboard. The app reads the host's `PORT` automatically, and `trust proxy` is already configured for hosting behind a proxy.
+
+### Before you make it public
+
+1. **Serve over HTTPS** — a key entered in the browser travels to your server.
+2. **Decide who pays.** With no server key, each visitor uses their own. With one, every analysis bills you, which is what `RATE_LIMIT_MAX` protects.
+3. Have a dietitian review the condition guidance in `config.js`.
+4. Keep the disclaimers, and add a privacy policy.

@@ -120,19 +120,37 @@ public/
   app.js           UI logic (no framework, no build step)
   styles.css       Styles
 docs/screenshot.png
+render.yaml        Render Blueprint (free web service, one-click deploy)
+Dockerfile         For any container host
 .env.example       Template for optional server-side defaults
 SETUP.md           Detailed setup and troubleshooting guide
 ```
 
-## Deploy
+## Deploy (free)
 
-Any Node host works (Render, Railway, Fly.io, a VPS):
+This is a long-running Node server, so use a host that runs a persistent process. **Render** is the easiest free option, and this repo ships a `render.yaml` Blueprint:
 
-1. Set `NODE_ENV=production`.
-2. Run `npm start`.
-3. Serve over HTTPS.
+1. Push this repo to GitHub.
+2. In Render: **New + → Blueprint**, pick the repo, click **Apply**. Render reads `render.yaml`, builds with `npm install`, starts with `npm start`, and health-checks `/api/conditions`.
+3. Done — you get an `https://….onrender.com` URL over HTTPS. No key is required; visitors bring their own in **API settings**.
 
-You do not need to set a key on the host if every visitor brings their own.
+Free-tier trade-offs on Render: the service **sleeps after 15 minutes idle** and needs up to ~a minute to wake (the app's loading skeleton covers the wait). Render's own docs say free instances are not for production.
+
+Hosts that run a long-lived Node process:
+
+| Host | Free tier | Card needed | Notes |
+|---|---|---|---|
+| **Render** | 512 MB, 750 hrs/mo | No | Sleeps when idle; `render.yaml` included |
+| **Northflank** | 2 services, always-on | Yes (verify) | Pick this if you want no cold starts |
+| **Koyeb** | 1 service, scale-to-zero | Yes (verify) | Sleeps when idle, no monthly hour cap |
+| **Zeabur** | $5/mo usage credit | No | Credit runs out |
+| **Railway** | $5 trial, then $1/mo credit | No | Very small after the trial |
+
+A `Dockerfile` is included, so any container host also works (Cloud Run, Fly.io, a VPS). Set `NODE_ENV=production`, run `npm start`, and serve over HTTPS.
+
+> **Serverless hosts will not work as-is.** Vercel, Netlify and Cloudflare Workers run per-request functions rather than a persistent server, so a plain Express app cannot stay up there without rewriting it into functions.
+
+Step-by-step instructions and troubleshooting: [SETUP.md](SETUP.md#deploying).
 
 ## Disclaimer
 
